@@ -10,7 +10,8 @@
     <string name="auto_changing">Автообмен</string>
     <string name="add_element">Добавить</string>
     <string name="delete">Пометка удаления</string>
-    <string name="confirm_delete">Пометить на удаление</string>
+    <string name="confirm_delete">Пометить на удаление?</string>
+    <string name="confirm_undelete">Снять пометку?</string>
     <string name="title_activity_todo_list">Todo</string>
     <string name="title_activity_todo_details">TodoDetails</string>
     <string name="create">Создать</string>
@@ -19,6 +20,8 @@
     <string name="new_document">Новая заметка</string>
     <string name="new_task">+</string>
     <string name="empty_list">(пустой список)</string>
+    <string name="confirm">Подтвердить</string>
+
 
     <string name="cancel">Отмена</string>
     <string name="add_folder">Добавить папку</string>

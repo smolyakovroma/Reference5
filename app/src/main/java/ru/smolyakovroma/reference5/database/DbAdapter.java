@@ -187,7 +187,8 @@ public class DbAdapter {
         values.put(REFERENCE_CODE, sprElement.getCode());
         values.put(REFERENCE_NAME, sprElement.getName());
         values.put(REFERENCE_FOLDER, sprElement.isFolder());
-
+        values.put(REFERENCE_PARENT_ID, sprElement.getParent_id());
+        values.put(REFERENCE_REMOVE, sprElement.isRemove());
         dbHelper.getWritableDatabase().insert(TABLE_REFERENCE, null, values);
         return true;
 

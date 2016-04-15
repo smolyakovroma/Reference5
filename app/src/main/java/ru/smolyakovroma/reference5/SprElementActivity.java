@@ -2,11 +2,15 @@ package ru.smolyakovroma.reference5;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import ru.smolyakovroma.reference5.model.SprElement;
 
@@ -20,6 +24,7 @@ public class SprElementActivity extends AppCompatActivity {
     EditText etCode;
     EditText etName;
     EditText etGroup;
+    ImageButton ibSelectGroup;
 
     private EditText txtTodoDetails;
     private SprElement sprElement;
@@ -33,11 +38,16 @@ public class SprElementActivity extends AppCompatActivity {
         etName = (EditText) findViewById(R.id.et_name);
         etGroup = (EditText) findViewById(R.id.et_group);
 
+        ibSelectGroup = (ImageButton) findViewById(R.id.ib_select_group);
+        ibSelectGroup.setOnClickListener(new SprOnClickListener());
+
         sprElement = (SprElement) getIntent().getSerializableExtra(
                 SprActivity.SPR_ELEMENT);
 
         etCode.setText(sprElement.getCode());
         etName.setText(sprElement.getName());
+        etGroup.setText(Integer.toString(sprElement.getParent_id()));
+
 //        etGroup.setText(Integer.toString(sprElement.getParent_id()));
     }
 
@@ -53,6 +63,7 @@ public class SprElementActivity extends AppCompatActivity {
         sprElement.setCode(etCode.getText().toString());
         sprElement.setName(etName.getText().toString());
         sprElement.setFolder(false);
+        sprElement.setParent_id(Integer.parseInt(etGroup.getText().toString()));
         AppContext.getDbAdapter().addNewElement(sprElement);
         setResult(RESULT_SAVE, getIntent());
     }
@@ -82,13 +93,12 @@ public class SprElementActivity extends AppCompatActivity {
             case R.id.delete: {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(R.string.confirm_delete);
+                builder.setMessage(sprElement.isRemove()?R.string.confirm_undelete:R.string.confirm_delete);
 
-                builder.setPositiveButton(R.string.delete,
+                builder.setPositiveButton(R.string.confirm,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                setResult(RESULT_DELETE, getIntent());
-                                finish();
+                             sprElement.setRemove(!sprElement.isRemove());
 
                             }
                         });
@@ -109,5 +119,21 @@ public class SprElementActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class SprOnClickListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.ib_select_group:{
+                    Intent intentSprElement = new Intent(getApplicationContext(), SprActivitySelect.class);
+                    startActivity(intentSprElement);
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
     }
 }

@@ -37,11 +37,29 @@
         android:layout_height="wrap_content"
         android:text="Группа" />
 
-    <EditText
-        android:id="@+id/et_group"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp" />
+        android:orientation="horizontal"
+        android:weightSum="1">
+    <EditText
+        android:id="@+id/et_group"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:gravity="top|left"
+        android:textSize="16sp">
 
+    </EditText>
+    <ImageButton
+        android:id="@+id/ib_select_group"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/select"
+        android:layout_height="24dp"
+        android:layout_alignRight="@id/et_group"
+        android:layout_width="24dp"
+        android:layout_gravity="right|center_vertical"
 
+        />
+    </LinearLayout>
 </LinearLayout>

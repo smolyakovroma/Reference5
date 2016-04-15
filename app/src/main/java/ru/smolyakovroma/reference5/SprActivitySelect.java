@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import ru.smolyakovroma.reference5.model.SprElement;
 
-public class SprActivity extends AppCompatActivity {
+public class SprActivitySelect extends AppCompatActivity {
 
     public static String SPR_ELEMENT = "ru.smolyakovroma.reference5.model.SprElement";
     public static int SPR_ELEMENT_REQUEST = 1;
