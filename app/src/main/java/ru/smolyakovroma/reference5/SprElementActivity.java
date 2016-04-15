@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import ru.smolyakovroma.reference5.model.SprElement;
 
@@ -24,9 +23,9 @@ public class SprElementActivity extends AppCompatActivity {
     EditText etCode;
     EditText etName;
     EditText etGroup;
+    String groupId;
     ImageButton ibSelectGroup;
 
-    private EditText txtTodoDetails;
     private SprElement sprElement;
 
     @Override
@@ -34,9 +33,11 @@ public class SprElementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spr_element);
 
+
         etCode = (EditText) findViewById(R.id.et_code);
         etName = (EditText) findViewById(R.id.et_name);
         etGroup = (EditText) findViewById(R.id.et_group);
+
 
         ibSelectGroup = (ImageButton) findViewById(R.id.ib_select_group);
         ibSelectGroup.setOnClickListener(new SprOnClickListener());
@@ -44,10 +45,18 @@ public class SprElementActivity extends AppCompatActivity {
         sprElement = (SprElement) getIntent().getSerializableExtra(
                 SprActivity.SPR_ELEMENT);
 
+        if(sprElement.getId() == null){
+            if(sprElement.isFolder()){setTitle(getString(R.string.add_folder_title));}
+            else{setTitle(getString(R.string.add_element_title));}
+        }else{
+            if(sprElement.isFolder()){setTitle(getString(R.string.edit_folder_title));}
+            else{setTitle(getString(R.string.edit_element_title));}
+        }
         etCode.setText(sprElement.getCode());
         etName.setText(sprElement.getName());
-        etGroup.setText(Integer.toString(sprElement.getParent_id()));
 
+        groupId = Integer.toString(sprElement.getParent_id());
+        etGroup.setText(AppContext.getDbAdapter().getNameById(groupId));
 //        etGroup.setText(Integer.toString(sprElement.getParent_id()));
     }
 
@@ -62,9 +71,9 @@ public class SprElementActivity extends AppCompatActivity {
 
         sprElement.setCode(etCode.getText().toString());
         sprElement.setName(etName.getText().toString());
-        sprElement.setFolder(false);
-        sprElement.setParent_id(Integer.parseInt(etGroup.getText().toString()));
-        AppContext.getDbAdapter().addNewElement(sprElement);
+//        sprElement.setFolder(false);
+        sprElement.setParent_id(Integer.parseInt(groupId));
+        AppContext.getDbAdapter().updateSprElement(sprElement);
         setResult(RESULT_SAVE, getIntent());
     }
 
@@ -72,20 +81,12 @@ public class SprElementActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-
-                if (txtTodoDetails.getText().toString().trim().length() == 0) {
-                    setResult(RESULT_CANCELED);
-                } else {
                     saveElement();
-                }
                 finish();
                 return true;
             }
-
             case R.id.save: {
-
                 saveElement();
-
                 finish();
                 return true;
             }
@@ -93,12 +94,12 @@ public class SprElementActivity extends AppCompatActivity {
             case R.id.delete: {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(sprElement.isRemove()?R.string.confirm_undelete:R.string.confirm_delete);
+                builder.setMessage(sprElement.isRemove() ? R.string.confirm_undelete : R.string.confirm_delete);
 
                 builder.setPositiveButton(R.string.confirm,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                             sprElement.setRemove(!sprElement.isRemove());
+                                sprElement.setRemove(!sprElement.isRemove());
 
                             }
                         });
@@ -121,18 +122,33 @@ public class SprElementActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class SprOnClickListener implements View.OnClickListener{
+
+
+    class SprOnClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.ib_select_group:{
-                    Intent intentSprElement = new Intent(getApplicationContext(), SprActivitySelect.class);
-                    startActivity(intentSprElement);
+            switch (v.getId()) {
+                case R.id.ib_select_group: {
+                    Intent intentSprSelectGroup = new Intent(getApplicationContext(), SprActivitySelectGroup.class);
+                    intentSprSelectGroup.putExtra(AppContext.SPR_CURRENT_PARENT_FOLDER_ID, sprElement.getParent_id());
+                    startActivityForResult(intentSprSelectGroup, AppContext.SPR_SELECT_GROUP_REQUEST);
                     break;
                 }
                 default:
                     break;
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AppContext.SPR_SELECT_GROUP_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                groupId = data.getStringExtra(SprActivitySelectGroup.SPR_SELECT_GROUP_ID);
+                etGroup.setText(AppContext.getDbAdapter().getNameById(groupId));
             }
         }
     }

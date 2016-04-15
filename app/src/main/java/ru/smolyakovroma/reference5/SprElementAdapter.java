@@ -70,6 +70,7 @@ public class SprElementAdapter extends ArrayAdapter<SprElement> {
         return convertView;
     }
 
+
     static class ViewHolder {
         public TextView txtName;
         public TextView txtCode;

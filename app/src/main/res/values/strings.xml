@@ -25,4 +25,10 @@
 
     <string name="cancel">Отмена</string>
     <string name="add_folder">Добавить папку</string>
+    <string name="select">Выбрать</string>
+    <string name="error_not_found_element">...</string>
+    <string name="add_folder_title">Добавление группы</string>
+    <string name="add_element_title">Добавление элемента</string>
+    <string name="edit_folder_title">Редактирование группы</string>
+    <string name="edit_element_title">Редактирование элемента</string>
 </resources>

@@ -18,9 +18,7 @@
         </activity>
         <activity android:name=".SprElementActivity" >
         </activity>
-        <activity android:name=".SprFolderActivity" >
-        </activity>
-        <activity android:name=".SprActivitySelect"/>
+        <activity android:name=".SprActivitySelectGroup"/>
     </application>
 
 </manifest>

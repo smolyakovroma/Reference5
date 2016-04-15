@@ -12,6 +12,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import ru.smolyakovroma.reference5.R;
+import ru.smolyakovroma.reference5.SprTypeSelect;
 import ru.smolyakovroma.reference5.Utils;
 import ru.smolyakovroma.reference5.model.SprElement;
 
@@ -70,6 +72,27 @@ public class DbAdapter {
                 + " from " + TABLE_REFERENCE + " o order by " + REFERENCE_FOLDER + " DESC";
 
         return db.rawQuery(sql, null);
+    }
+
+    public String getNameById(String id){
+        Cursor c = null;
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("select "
+                + "o.name as " + REFERENCE_NAME
+                + " from " + TABLE_REFERENCE + " o where coalesce(o._id,0) = " + id);
+
+        c = db.rawQuery(builder.toString(), null);
+
+        String result = context.getString(R.string.error_not_found_element);
+
+        while (c.moveToNext()) {
+
+            result = c.getString(c.getColumnIndex(DbAdapter.REFERENCE_NAME));
+        }
+
+        c.close();
+        return result;
     }
 
     // показать пункты справочника
@@ -134,7 +157,7 @@ public class DbAdapter {
 
     }
 
-    public ArrayList<SprElement> getSprElements(int current_folder_id) {
+    public ArrayList<SprElement> getSprElements(int current_folder_id, SprTypeSelect type_index) {
         Cursor c = null;
         StringBuilder builder = new StringBuilder();
 
@@ -156,6 +179,12 @@ public class DbAdapter {
             sprList.add(getSprElementById(current_folder_id));
             builder.append(" where coalesce(o.parent_id,0) = " + current_folder_id);// все дочерние объекты для выбранного
         }
+        if(type_index == SprTypeSelect.ONLY_GROUPS){
+            builder.append(" and coalesce(o.folder,0) = 1");//только группы
+        } else if (type_index == SprTypeSelect.ONLY_ELEMENTS){
+            builder.append(" and coalesce(o.folder,0) = 0");//только элементы
+        }
+
         builder.append(" order by " + REFERENCE_FOLDER + " DESC");
 
 
@@ -180,7 +209,7 @@ public class DbAdapter {
 
     }
 
-    public boolean addNewElement(SprElement sprElement){
+    public boolean updateSprElement(SprElement sprElement){
 //        SQLiteStatement stmt = null;
 
         ContentValues values = new ContentValues();
@@ -189,29 +218,12 @@ public class DbAdapter {
         values.put(REFERENCE_FOLDER, sprElement.isFolder());
         values.put(REFERENCE_PARENT_ID, sprElement.getParent_id());
         values.put(REFERENCE_REMOVE, sprElement.isRemove());
-        dbHelper.getWritableDatabase().insert(TABLE_REFERENCE, null, values);
+        if(sprElement.getId() == null) {
+            dbHelper.getWritableDatabase().insert(TABLE_REFERENCE, null, values);
+        }else{
+        dbHelper.getWritableDatabase().update(TABLE_REFERENCE, values, REFERENCE_ID + " = ? ", new String[] {Integer.toString(sprElement.getId())});}
         return true;
 
-//        try {
-//
-//            stmt = dbHelper.getWritableDatabase().compileStatement("update " + TABLE_REFERENCE + " set code=?, name=?, parent_id = null where _id=?");
-//            stmt.bindString(1, sprElement.getCode());
-//            stmt.bindString(2, sprElement.getName());
-//            stmt.bindLong(3, 11);
-//
-//
-//            stmt.executeInsert();
-//
-//            return true;
-//        } catch (Exception e) {
-//            Log.e("ErrorDB", e.getMessage());
-//        } finally {
-//            if (stmt != null) {
-//                stmt.close();
-//            }
-//        }
-//
-//        return false;
     }
 
     private static class DbHelper extends SQLiteOpenHelper {

@@ -31,7 +31,7 @@ public class SprActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spr);
 
-        listSprElement = AppContext.getDbAdapter().getSprElements(0);
+        listSprElement = AppContext.getDbAdapter().getSprElements(0, SprTypeSelect.ALL);
 
         listView = (ListView) findViewById(R.id.listView);
         listView.setOnItemClickListener(new ListViewClickListener());
@@ -60,25 +60,27 @@ public class SprActivity extends AppCompatActivity {
             case R.id.menu_add_element: {
                 SprElement sprElement = new SprElement();
                 sprElement.setParent_id(current_folder_id);
+                sprElement.setFolder(false);
 //                TODO установим новый код
 //                sprElement.setName(getResources()
 //                        .getString(R.string.new_document));
-                showElement(sprElement);
+                showSpr(sprElement);
                 return true;
             }
             case R.id.menu_add_folder: {
             SprElement sprElement = new SprElement();
                 sprElement.setParent_id(current_folder_id);
+                sprElement.setFolder(true);
 //                TODO установим новый код
 //                sprElement.setName(getResources()
 //                        .getString(R.string.new_document));
-            showFolder(sprElement);
+            showSpr(sprElement);
             return true;
         }
             case android.R.id.home: {
                 if (current_folder_id != 0) {
                     int parent_folder_id = AppContext.getDbAdapter().getParentFolder(current_folder_id);
-                    listSprElement = AppContext.getDbAdapter().getSprElements(parent_folder_id);
+                    listSprElement = AppContext.getDbAdapter().getSprElements(parent_folder_id, SprTypeSelect.ALL);
                     arrayAdapter.clear();
                     arrayAdapter.addAll(listSprElement);
                     arrayAdapter.notifyDataSetChanged();
@@ -93,17 +95,12 @@ public class SprActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showElement(SprElement sprElement) {
+    private void showSpr(SprElement sprElement) {
         Intent intentSprElement = new Intent(this, SprElementActivity.class);
         intentSprElement.putExtra(SPR_ELEMENT, sprElement);
         startActivityForResult(intentSprElement, SPR_ELEMENT_REQUEST);
     }
 
-    private void showFolder(SprElement sprElement) {
-        Intent intentSprElement = new Intent(this, SprFolderActivity.class);
-        intentSprElement.putExtra(SPR_ELEMENT, sprElement);
-        startActivityForResult(intentSprElement, SPR_ELEMENT_REQUEST);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -113,17 +110,16 @@ public class SprActivity extends AppCompatActivity {
                 case RESULT_CANCELED:
                     break;
                 case SprElementActivity.RESULT_SAVE:
-//                    sprElement = (SprElement) data.getSerializableExtra(SPR_ELEMENT);
-//                    addElement(sprElement);
-                    listSprElement = AppContext.getDbAdapter().getSprElements(current_folder_id);
+                    sprElement = (SprElement) data.getSerializableExtra(SPR_ELEMENT);
+                    current_folder_id = sprElement.getParent_id();
+                    listSprElement = AppContext.getDbAdapter().getSprElements(current_folder_id, SprTypeSelect.ALL);
                     arrayAdapter.clear();
                     arrayAdapter.addAll(listSprElement);
                     arrayAdapter.notifyDataSetChanged();
-
                     break;
                 case SprElementActivity.RESULT_DELETE:
-                    sprElement = (SprElement) data.getSerializableExtra(SPR_ELEMENT);
-                    deleteElement(sprElement);
+//                    sprElement = (SprElement) data.getSerializableExtra(SPR_ELEMENT);
+//                    deleteElement(sprElement);
                     break;
                 default:
                     break;
@@ -131,21 +127,6 @@ public class SprActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("NewApi")
-    private void deleteElement(SprElement sprElement) {
-        listSprElement.remove(sprElement.getId().intValue());
-        arrayAdapter.notifyDataSetChanged();
-    }
-
-    @SuppressLint("NewApi")
-    private void addElement(SprElement sprElement) {
-        if (sprElement.getId() == null) {
-            listSprElement.add(sprElement);
-        } else {
-//            listSprElement.set()
-        }
-        arrayAdapter.notifyDataSetChanged();
-    }
 
     class ListViewClickListener implements AdapterView.OnItemClickListener {
 
@@ -154,17 +135,16 @@ public class SprActivity extends AppCompatActivity {
             SprElement sprElement = (SprElement) parent.getAdapter().getItem(position);
             if (sprElement.isFolder() && sprElement.isTopFolder()) {
                 int parent_folder_id = AppContext.getDbAdapter().getParentFolder(current_folder_id);
-                listSprElement = AppContext.getDbAdapter().getSprElements(parent_folder_id);
+                listSprElement = AppContext.getDbAdapter().getSprElements(parent_folder_id, SprTypeSelect.ALL);
                 arrayAdapter.clear();
                 arrayAdapter.addAll(listSprElement);
                 arrayAdapter.notifyDataSetChanged();
                 current_folder_id = parent_folder_id;
             }
 
-//            showElement(sprElement);
             else if (sprElement.isFolder()) {
                 current_folder_id = sprElement.getId();
-                listSprElement = AppContext.getDbAdapter().getSprElements(current_folder_id);
+                listSprElement = AppContext.getDbAdapter().getSprElements(current_folder_id, SprTypeSelect.ALL);
                 arrayAdapter.clear();
                 arrayAdapter.addAll(listSprElement);
                 arrayAdapter.notifyDataSetChanged();
@@ -177,14 +157,7 @@ public class SprActivity extends AppCompatActivity {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             SprElement sprElement = (SprElement) parent.getAdapter().getItem(position);
-            if(sprElement.isFolder()){
-                    showFolder(sprElement);
-                return true;
-            }
-            else if (!sprElement.isFolder()){
-                    showElement(sprElement);
-                return true;
-            }
+            showSpr(sprElement);
             return false;
         }
     }
