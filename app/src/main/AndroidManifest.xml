@@ -3,22 +3,27 @@
     package="ru.smolyakovroma.reference5" >
 
     <application
-        android:name="ru.smolyakovroma.reference5.AppContext"
+        android:name=".AppContext"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity android:name=".SprActivity" >
+        </activity>
+        <activity android:name=".SprElementActivity" >
+        </activity>
+        <activity android:name=".SprActivitySelectGroup" />
+        <activity android:name=".SprActivityPicker" />
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SprElementActivity" >
+        <activity android:name=".DocActivity" >
         </activity>
-        <activity android:name=".SprActivitySelectGroup"/>
     </application>
 
 </manifest>

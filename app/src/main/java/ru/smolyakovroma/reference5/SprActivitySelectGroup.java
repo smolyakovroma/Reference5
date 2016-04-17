@@ -12,13 +12,14 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import ru.smolyakovroma.reference5.adapter.SprAdapter;
 import ru.smolyakovroma.reference5.model.SprElement;
 
 public class SprActivitySelectGroup extends AppCompatActivity {
 
     public static String SPR_SELECT_GROUP_ID = "ru.smolyakovroma.reference5.select_group";
 
-    private SprElementAdapter arrayAdapter;
+    private SprAdapter arrayAdapter;
     private static ArrayList<SprElement> listSprElement = new ArrayList<>();
     private ListView listView;
 
@@ -43,7 +44,7 @@ public class SprActivitySelectGroup extends AppCompatActivity {
     }
 
     private void fillSprElement() {
-        arrayAdapter = new SprElementAdapter(this, listSprElement);
+        arrayAdapter = new SprAdapter(this, listSprElement, false);
         listView.setAdapter(arrayAdapter);
     }
 

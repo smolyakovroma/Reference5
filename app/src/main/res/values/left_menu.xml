@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="menu_documents">@string/documents</string>
+    <string name="menu_references">@string/references</string>
+    <string name="menu_setting">@string/settings</string>
+
+    <string-array name="child_menu_documents">
+        <item>@string/documents_1</item>
+        <item>@string/documents_2</item>
+        <item>@string/documents_3</item>
+
+    </string-array>
+    <string-array name="child_menu_references">
+        <item>@string/references_1</item>
+        <item>@string/references_2</item>
+        <item>@string/references_3</item>
+    </string-array>
+    <string-array name="child_menu_settings">
+        <item>@string/settings_changes</item>
+        <item>@string/settings_user</item>
+    </string-array>
+
+</resources>

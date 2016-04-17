@@ -1,7 +1,6 @@
-package ru.smolyakovroma.reference5;
+package ru.smolyakovroma.reference5.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +10,19 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ru.smolyakovroma.reference5.R;
 import ru.smolyakovroma.reference5.model.SprElement;
 
-public class SprElementAdapter extends ArrayAdapter<SprElement> {
+public class SprAdapter extends ArrayAdapter<SprElement> {
 
     private List<SprElement> list;
+    private boolean isPicker = false;
 
 
-    public SprElementAdapter(Context context, List<SprElement> list) {
-        super(context, R.layout.listview_row_element, R.id.txt_element_name, list);
+    public SprAdapter(Context context, List<SprElement> list, boolean isPicker) {
+        super(context, R.layout.spr_item, R.id.txt_element_name, list);
         this.list = list;
+        this.isPicker = isPicker;
     }
 
     @Override
@@ -30,10 +32,12 @@ public class SprElementAdapter extends ArrayAdapter<SprElement> {
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.listview_row_element, parent, false);
+            convertView = inflater.inflate(R.layout.spr_item, parent, false);
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.txt_element_name);
             viewHolder.txtCode = (TextView) convertView.findViewById(R.id.txt_element_code);
+            viewHolder.txtAmount = (TextView) convertView.findViewById(R.id.txt_amount);
+            viewHolder.txtUnit = (TextView) convertView.findViewById(R.id.txt_unit);
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.img_source);
             viewHolder.imageViewArrow = (ImageView) convertView.findViewById(R.id.img_source_arrow);
             convertView.setTag(viewHolder);
@@ -41,7 +45,16 @@ public class SprElementAdapter extends ArrayAdapter<SprElement> {
         }
 
         ViewHolder holder = (ViewHolder) convertView.getTag();
+
         SprElement sprElement = list.get(position);
+
+        if(isPicker){
+//            if(list.contains(sprElement)){
+                holder.txtUnit.setText(sprElement.getUnit());
+                holder.txtAmount.setText(Integer.toString(sprElement.getAmount()));
+
+//         }
+        }
         holder.txtName.setText(sprElement.getName());
         holder.txtCode.setText(sprElement.getCode());
 
@@ -70,10 +83,11 @@ public class SprElementAdapter extends ArrayAdapter<SprElement> {
         return convertView;
     }
 
-
     static class ViewHolder {
         public TextView txtName;
         public TextView txtCode;
+        public TextView txtAmount;
+        public TextView txtUnit;
         public ImageView imageView;
         public ImageView imageViewArrow;
 

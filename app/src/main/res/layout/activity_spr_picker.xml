@@ -29,7 +29,14 @@
             android:textSize="20sp" />
 
     </RelativeLayout>
-
+<TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="Выбранно:"
+    android:gravity="left"
+    android:paddingBottom="3dp"
+    android:paddingTop="3dp"
+    android:textStyle="bold"/>
     <ListView
         android:id="@+id/listViewPick"
         android:layout_width="fill_parent"

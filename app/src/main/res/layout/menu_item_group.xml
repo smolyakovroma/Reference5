@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp" 
+    android:background="@android:color/darker_gray">
+
+
+    <TextView
+        android:id="@+id/menuItemGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="19sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" 
+        />
+
+</LinearLayout>

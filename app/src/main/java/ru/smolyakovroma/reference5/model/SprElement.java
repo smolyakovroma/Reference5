@@ -14,16 +14,22 @@ public class SprElement implements Serializable{
     private Integer parent_id;
     private boolean topFolder;
 
+    private String unit;
+    private int amount;
+
     public SprElement(String name, String code, boolean folder, boolean remove, Integer parent_id) {
         this.name = name;
         this.code = code;
         this.folder = folder;
         this.remove = remove;
         this.parent_id = parent_id;
+        this.amount = 0;
+        this.unit = "";
     }
 
     public SprElement() {
-
+        this.amount = 0;
+        this.unit = "";
     }
 
     public Integer getParent_id() {
@@ -80,6 +86,26 @@ public class SprElement implements Serializable{
 
     public void setRemove(boolean remove) {
         this.remove = remove;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public void incrAmount(){
+        this.amount++;
     }
 
     @Override

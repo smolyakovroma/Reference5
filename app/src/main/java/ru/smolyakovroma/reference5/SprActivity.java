@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import ru.smolyakovroma.reference5.adapter.SprAdapter;
 import ru.smolyakovroma.reference5.model.SprElement;
 
 public class SprActivity extends AppCompatActivity {
@@ -19,7 +20,7 @@ public class SprActivity extends AppCompatActivity {
     public static String SPR_ELEMENT = "ru.smolyakovroma.reference5.model.SprElement";
     public static int SPR_ELEMENT_REQUEST = 1;
 
-    private SprElementAdapter arrayAdapter;
+    private SprAdapter arrayAdapter;
     private static ArrayList<SprElement> listSprElement = new ArrayList<>();
     private ListView listView;
 
@@ -43,7 +44,7 @@ public class SprActivity extends AppCompatActivity {
     }
 
     private void fillSprElement() {
-        arrayAdapter = new SprElementAdapter(this, listSprElement);
+        arrayAdapter = new SprAdapter(this, listSprElement, false);
         listView.setAdapter(arrayAdapter);
     }
 
@@ -86,6 +87,11 @@ public class SprActivity extends AppCompatActivity {
                     arrayAdapter.notifyDataSetChanged();
                     current_folder_id = parent_folder_id;
                 }
+                return true;
+            }
+            case R.id.pick: {
+                Intent intentSprElement = new Intent(this, SprActivityPicker.class);
+                startActivityForResult(intentSprElement, SPR_ELEMENT_REQUEST);
                 return true;
             }
 

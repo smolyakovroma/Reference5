@@ -53,6 +53,28 @@
         android:textStyle="bold"
         android:typeface="sans" />
 
-
+    <TextView
+        android:id="@+id/txt_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:paddingRight="10dp"
+        android:layout_alignBottom="@+id/txt_element_name"
+        android:layout_toLeftOf="@+id/txt_unit"
+        android:layout_toStartOf="@+id/txt_unit" />
+    <TextView
+        android:id="@+id/txt_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:paddingRight="10dp"
+        android:layout_alignTop="@+id/txt_amount"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/txt_element_name"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

@@ -6,7 +6,7 @@
 
 
     <string name="title_activity_content">Content</string>
-    <string name="settings">Настройки</string>
+
     <string name="auto_changing">Автообмен</string>
     <string name="add_element">Добавить</string>
     <string name="delete">Пометка удаления</string>
@@ -21,7 +21,8 @@
     <string name="new_task">+</string>
     <string name="empty_list">(пустой список)</string>
     <string name="confirm">Подтвердить</string>
-
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
 
     <string name="cancel">Отмена</string>
     <string name="add_folder">Добавить папку</string>
@@ -31,4 +32,19 @@
     <string name="add_element_title">Добавление элемента</string>
     <string name="edit_folder_title">Редактирование группы</string>
     <string name="edit_element_title">Редактирование элемента</string>
+
+    <string name="documents">Документы</string>
+    <string name="documents_1">Отчет производства</string>
+    <string name="documents_2">Требования-накладная</string>
+    <string name="documents_3">Перемещение материалов</string>
+
+    <string name="references">Справочники</string>
+
+    <string name="references_1">Номенклатура</string>
+    <string name="references_2">Контрагенты</string>
+    <string name="references_3">Склады</string>
+
+    <string name="settings">Настройки</string>
+    <string name="settings_changes">Обмены</string>
+    <string name="settings_user">Настройки пользователя</string>
 </resources>
