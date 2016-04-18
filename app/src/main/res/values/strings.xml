@@ -32,6 +32,8 @@
     <string name="add_element_title">Добавление элемента</string>
     <string name="edit_folder_title">Редактирование группы</string>
     <string name="edit_element_title">Редактирование элемента</string>
+    <string name="add_document_title">Новый документ</string>
+    <string name="edit_document_title">Документ</string>
 
     <string name="documents">Документы</string>
     <string name="documents_1">Отчет производства</string>

@@ -24,6 +24,7 @@
         </activity>
         <activity android:name=".DocActivity" >
         </activity>
+        <activity android:name=".DocElementActivity"/>
     </application>
 
 </manifest>

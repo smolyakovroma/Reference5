@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import ru.smolyakovroma.reference5.R;
 import ru.smolyakovroma.reference5.SprTypeSelect;
 import ru.smolyakovroma.reference5.Utils;
+import ru.smolyakovroma.reference5.enums.DocumentType;
+import ru.smolyakovroma.reference5.model.DocElement;
 import ru.smolyakovroma.reference5.model.SprElement;
 
 
@@ -267,6 +269,52 @@ public class DbAdapter {
         }
         return true;
 
+    }
+
+    public ArrayList<DocElement> getDocElements(DocumentType docDisplacementStocks) {
+        ArrayList<DocElement> docList = new ArrayList<>();
+
+        Cursor c = null;
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("select "
+                + "o._id as " + REFERENCE_ID
+                + ",o.doc_datetime as " + DOCUMENT_DATETIME
+                + ",o.status as " + DOCUMENT_STATUS
+                + " from " + TABLE_DOC_DISPLACEMENT_STOCKS + " o");
+
+
+
+        builder.append(" order by " + DOCUMENT_DATETIME + " DESC");
+
+
+        c = db.rawQuery(builder.toString(), null);
+
+
+        while (c.moveToNext()) {
+            DocElement docValue = new DocElement();
+            docValue.setId(c.getInt(c.getColumnIndex(DbAdapter.REFERENCE_ID)));
+            docValue.setDoc_datetime(c.getLong(c.getColumnIndex(DbAdapter.DOCUMENT_DATETIME)));
+            docValue.setStatus(c.getInt(c.getColumnIndex(DbAdapter.DOCUMENT_STATUS)));
+            docList.add(docValue);
+        }
+        c.close();
+
+        return docList;
+    }
+
+    public boolean updateDocElement(DocElement docElement) {
+
+        ContentValues values = new ContentValues();
+        values.put(DOCUMENT_DATETIME, docElement.getDoc_datetime());
+        values.put(DOCUMENT_STATUS, docElement.getStatus());
+
+        if (docElement.getId() == null) {
+            dbHelper.getWritableDatabase().insert(TABLE_DOC_DISPLACEMENT_STOCKS, null, values);
+        } else {
+            dbHelper.getWritableDatabase().update(TABLE_DOC_DISPLACEMENT_STOCKS, values, REFERENCE_ID + " = ? ", new String[]{Integer.toString(docElement.getId())});
+        }
+        return true;
     }
 
     private static class DbHelper extends SQLiteOpenHelper {

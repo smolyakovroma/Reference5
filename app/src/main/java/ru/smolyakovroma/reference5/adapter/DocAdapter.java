@@ -1,52 +1,68 @@
 package ru.smolyakovroma.reference5.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import ru.smolyakovroma.reference5.R;
+import ru.smolyakovroma.reference5.model.DocElement;
 
-public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
+public class DocAdapter extends ArrayAdapter<DocElement> {
 
-    private ArrayList<String> mDataset;
+    private List<DocElement> list;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTextView;
+    public DocAdapter(Context context, List<DocElement> list) {
+        super(context, R.layout.doc_item, R.id.txt_element_name, list);
+        this.list = list;
+    }
 
-        public ViewHolder(View v) {
-            super(v);
-            mTextView = (TextView) v.findViewById(R.id.tv_recycler_item);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.doc_item, parent, false);
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.txtName = (TextView) convertView.findViewById(R.id.txt_element_name);
+            viewHolder.txtCode = (TextView) convertView.findViewById(R.id.txt_element_code);
+            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.img_source);
+            convertView.setTag(viewHolder);
+
         }
+
+        ViewHolder holder = (ViewHolder) convertView.getTag();
+
+        DocElement docElement = list.get(position);
+
+
+        holder.txtName.setText(Long.toString(docElement.getDoc_datetime()));
+        holder.txtCode.setText(Integer.toString(docElement.getStatus()));
+
+        if (docElement.getStatus() == 0) {
+            holder.imageView.setImageResource(R.drawable.document_save);
+        } else if (docElement.getStatus() == 1) {
+            holder.imageView.setImageResource(R.drawable.document_conduct);
+        } else {
+            holder.imageView.setImageResource(R.drawable.document_remove);
+        }
+
+
+        return convertView;
     }
 
-    public DocAdapter(ArrayList<String> dataset) {
-        mDataset = dataset;
-    }
+    static class ViewHolder {
+        public TextView txtName;
+        public TextView txtCode;
+        public ImageView imageView;
 
-    @Override
-    public DocAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                         int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.doc_item, parent, false);
-
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-
-        holder.mTextView.setText(mDataset.get(position));
 
     }
-
-    @Override
-    public int getItemCount() {
-        return mDataset.size();
-    }
-
 }
